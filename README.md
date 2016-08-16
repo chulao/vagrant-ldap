@@ -57,6 +57,7 @@ userPassword:: e1NIQX0wRFBpS3VOSXJyVm1EOElVQ3V3MWhReE5xWmM9
 After the machine is running you can access it by:
 * http://ldap.vagrant.dev/phpldapadmin
 * `ldapsearch -x -h ldap.vagrant.dev -D "cn=admin,dc=vagrant,dc=dev" -w admin -b "dc=vagrant,dc=dev" "(cn=*)"`
+
 > To change the ldap information, please see **puppet/data/common.yaml**
 
 To log in, using :
@@ -96,5 +97,5 @@ In the guest: `sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions 
 Back on the host, reload Vagrant: `vagrant reload`
 
 Referencies:
-* (Vagrant can't mount shared folder in VirtualBox 4.3.10)[https://github.com/mitchellh/vagrant/issues/3341]
-* (Vagrant landrush DNS plugin tips and troubleshooting)[https://gist.github.com/neuroticnerd/30b12648a933677ad2c4]
+* [Vagrant can't mount shared folder in VirtualBox 4.3.10](https://github.com/mitchellh/vagrant/issues/3341)
+* [Vagrant landrush DNS plugin tips and troubleshooting](https://gist.github.com/neuroticnerd/30b12648a933677ad2c4)
