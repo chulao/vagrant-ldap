@@ -1,2 +1,22 @@
-domain: ldap.vagrant.dev
 welcome_message: 'Welcome to OpenLDAP vm for development'
+
+server::host: ldap.vagrant.dev
+server::port: 389
+
+# LDAP Config
+ldap::client::uri: 'ldap://ldap.vagrant.dev'
+ldap::client::base: 'dc=vagrant,dc=dev'
+# ldap::client::ssl: true
+#ldap::client::ssl_cert: '/etc/ssl/certs/ldapserver.pem'
+
+ldap::server::suffix: 'dc=vagrant,dc=dev'
+ldap::server::rootdn: 'cn=admin,dc=vagrant,dc=dev'
+ldap::server::rootpw: 'admin'
+#ldap::server::ssl: true
+#ldap::server::ssl_cacert: '/etc/ssl/certs/ca.pem'
+#ldap::server::ssl_cert: '/etc/ssl/certs/ldapserver.crt'
+#ldap::server::ssl_key: '/etc/ssl/private/ldapserver.key'
+
+# LDAP Customization
+ldap::group::dn: "ou=company,%{hiera('ldap::server::suffix')}"
+ldap::group::name: "company"

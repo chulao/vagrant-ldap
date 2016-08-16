@@ -1,40 +1,76 @@
+$dn = domain2dn("$::domain")
+$admin_dn = hiera("ldap::server::rootdn")
+
+$host = hiera("server::host")
+$port = hiera("server::port")
+
 node "ldap.vagrant.dev" {
 	include stdlib
 
-	$suffix = "dc=vagrant,dc=dev"
+	include info
+	include ldap
+	include ldapAdmin
+}
 
-	notify { "Welcome":
+class info {
+	notify { "welcome":
 		message => hiera("welcome_message"),
 	}
 
-	notify { "Information":
-		message => "Creating LDAP setup as ${suffix}",
+	notify { "dn":
+		message => "Creating LDAP with DN: ${dn}",
 	}
 
-	class { "ldap::client":
-  		uri  => "ldap://ldap.vagrant.dev",
-  		base => "${suffix}",
+	exec { "apt-update":
+  		command => "/usr/bin/apt-get update"
 	}
 
+	Notify["welcome"] -> Notify["dn"] -> Exec["apt-update"]
+}
+
+class ldap {
+	require info
+
+	# More information - https://forge.puppet.com/datacentred/ldap/readme
 	class { "ldap::server":
-		suffix  => "${suffix}",
-		rootdn  => "cn=admin,${suffix}",
-		rootpw  => "admin",
 	}
 
+	# More information - https://forge.puppet.com/datacentred/ldap/readme
+	class { "ldap::client":
+	}
+
+#	$group_dn = hiera("ldap::group::dn")
+#	ldap_entry { $group_dn:
+#		ensure      => present,
+#		host        => $host,
+#		port        => $port,
+#		base        => hiera("ldap::client::base"),
+#		username    => hiera("ldap::server::rootdn"),
+#		password    => hiera("ldap::server::rootpw"),
+#		attributes  => { 
+#			"ou"    => hiera("ldap::group::name"),
+#			"objectClass"  => ["top", "organizationalUnit"]
+#		},
+#	}
+}
+
+class ldapAdmin {
+	require ldap
+
+	# More information - https://forge.puppet.com/spantree/phpldapadmin/readme
 	class { 'phpldapadmin':
-		ldap_host      => 'localhost',
-		ldap_suffix    => "${suffix}",
-		ldap_bind_id   => "cn=admin,${suffix}",
-		ldap_bind_pass => "admin",
+		ldap_host      => $host,
+		ldap_suffix    => hiera("ldap::server::suffix"),
+		ldap_bind_id   => hiera("ldap::server::rootdn"),
+		ldap_bind_pass => hiera("ldap::server::rootpw"),
 		extraconf      => "
 			\$servers->newServer('ldap_pla');
 			\$servers->SetValue('server','name','LDAP for Dev');
-			\$servers->SetValue('server','host','ldap.vagrant.dev');
-			\$servers->SetValue('server','port','389');
-			\$servers->SetValue('server','base',array('${suffix}','cn=config'));
+			\$servers->SetValue('server','host','${host}');
+			\$servers->SetValue('server','port','${port}');
+			\$servers->SetValue('server','base',array('${dn}','cn=config'));
 			\$servers->SetValue('login','auth_type','session');
-			\$servers->SetValue('login','bind_id','cn=admin,{suffix}');
+			\$servers->SetValue('login','bind_id','${admin_dn}');
 			\$servers->SetValue('server','tls',false);
 			\$servers->SetValue('appearance','password_hash_custom','crypt');
 			\$servers->SetValue('server','read_only',false);
@@ -43,8 +79,5 @@ node "ldap.vagrant.dev" {
 	}
 }
 
-exec { "echo":
-  command => "/usr/bin/apt-get update"
-}
 
-Exec["echo"] -> Package <| |>
+#Exec["echo"] -> Package <| |>

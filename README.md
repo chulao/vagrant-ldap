@@ -28,13 +28,13 @@ ps -ef | grep `cat ~/.vagrant.d/data/landrush/run/landrush.pid`
 Then, create the machine `vagrant up`
 
 After the machine is running you can access it by:
-* (http://ldap.vagrant.dev/phpldapadmin)[http://ldap.vagrant.dev/phpldapadmin]
-* `ldapsearch -h ldap://ldap.vagrant.dev -D "cn=admin,dc=vagrant,dc=dev" -W "(cn=*)"`
+* http://ldap.vagrant.dev/phpldapadmin
+* `ldapsearch -h ldap.vagrant.dev -D "cn=admin,dc=vagrant,dc=dev" -w admin "(cn=*)"`
+> To change the ldap information, please see **puppet/data/common.yaml**
 
 To log in, using :
 Username: `cn=admin,dc=vagrant,dc=dev`
 Password: `admin`
-
 
 
 Troubleshoot
@@ -59,4 +59,4 @@ In the guest: `sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions 
 
 Back on the host, reload Vagrant: `vagrant reload`
 
-Ref. [https://github.com/mitchellh/vagrant/issues/3341](https://github.com/mitchellh/vagrant/issues/3341)
+Ref. https://github.com/mitchellh/vagrant/issues/3341
