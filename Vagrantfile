@@ -21,12 +21,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.box = "debian/jessie64"
-  # config.vm.box = "ubuntu/trusty64"
+
+  config.vm.hostname = "#{NAME}.vagrant.dev"
 
   # Activate landrush plugin
-  # config.landrush.enable
-
-  config.vm.hostname = "#{NAME}.vagrant.test"
+  config.landrush.enable
+  config.landrush.tld = "vagrant.dev"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -36,7 +36,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512"]
-    vb.customize ["modifyvm", :id, "--name"  , "#{NAME}"]
+    vb.customize ["modifyvm", :id, "--name"  , "vagrant-#{NAME}"]
     vb.customize ["modifyvm", :id, "--cpus"  , 1]
   end
 
@@ -44,16 +44,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: "apt-get install --yes puppet"
 
   config.vm.provision :puppet do |puppet|
+    puppet.hiera_config_path = "puppet/hiera.yaml"
     puppet.manifests_path = "puppet/manifests"
     puppet.module_path = "puppet/modules"
+    puppet.manifest_file  = "init.pp"
     # puppet.options = "--verbose --debug"
   end
-
-  # config.vm.provision :puppet do |puppet|
-    # puppet.hiera_config_path = "puppet/hiera.yaml"
-    # puppet.module_path = "puppet/modules"
-    # puppet.manifests_path = "puppet/manifests"
-    # puppet.manifest_file  = "init.pp"
-    # puppet.options = "--verbose --debug"
-  # end
 end

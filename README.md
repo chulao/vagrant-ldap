@@ -11,16 +11,10 @@ Installation
 
 Install [Vagrant](http://www.vagrantup.com/).
 
-To work properly it required the following packages:
-* [camptocamp-openldap](https://forge.puppet.com/camptocamp/openldap)
-* [spantree-phpldapadmin](https://forge.puppet.com/spantree/phpldapadmin)
-
-To install run the following command: `puppet module install [package name]`
-
 It will need some plugins too:
 * [landrush](hhttps://github.com/vagrant-landrush/landrush)
 
-To install run the following command: `puppet plugin install [plugin name]`
+To install run the following command: `sudo puppet plugin install [plugin name]`
 
 Clonning this repository: `git clone https://github.com/chulao/vagrant-ldap.git`
 
@@ -35,15 +29,21 @@ Then, create the machine `vagrant up`
 
 After the machine is running you can access it by:
 * (http://ldap.vagrant.dev/phpldapadmin)[http://ldap.vagrant.dev/phpldapadmin]
-* `ldapsearch -h ldap://ldap.vagrant.dev -D "cn=admin,dc=foo,dc=bar" -W "(cn=*)"`
+* `ldapsearch -h ldap://ldap.vagrant.dev -D "cn=admin,dc=vagrant,dc=dev" -W "(cn=*)"`
 
 To log in, using :
-Username: `cn=admin,dc=vagrant,dc=test`
+Username: `cn=admin,dc=vagrant,dc=dev`
 Password: `admin`
+
 
 
 Troubleshoot
 ------------
+
+## Run in debug mode
+```
+vagrant up --debug &> vagrant.log
+```
 
 ## Failed to mount folders in Linux guest. This is usually because the "vboxsf" file system is not available.
 

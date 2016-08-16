@@ -1,0 +1,2 @@
+domain: ldap.vagrant.dev
+welcome_message: 'Welcome to OpenLDAP vm for development'
