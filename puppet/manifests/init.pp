@@ -39,19 +39,7 @@ class ldap {
 	class { "ldap::client":
 	}
 
-#	$group_dn = hiera("ldap::group::dn")
-#	ldap_entry { $group_dn:
-#		ensure      => present,
-#		host        => $host,
-#		port        => $port,
-#		base        => hiera("ldap::client::base"),
-#		username    => hiera("ldap::server::rootdn"),
-#		password    => hiera("ldap::server::rootpw"),
-#		attributes  => { 
-#			"ou"    => hiera("ldap::group::name"),
-#			"objectClass"  => ["top", "organizationalUnit"]
-#		},
-#	}
+	Class["ldap::server"] -> Class["ldap::client"]
 }
 
 class ldapAdmin {
@@ -78,6 +66,3 @@ class ldapAdmin {
 			\$servers->SetValue('auto_number','enable',false);"
 	}
 }
-
-
-#Exec["echo"] -> Package <| |>

@@ -1,6 +1,6 @@
 welcome_message: 'Welcome to OpenLDAP vm for development'
 
-server::host: ldap.vagrant.dev
+server::host: localhost
 server::port: 389
 
 # LDAP Config
