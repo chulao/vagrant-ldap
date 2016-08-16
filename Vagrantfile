@@ -43,6 +43,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # If choose 'debian/jessie64' box, please install the provisioner as informed on https://wiki.debian.org/Teams/Cloud/VagrantBaseBoxes#Provisioners
   config.vm.provision "shell", inline: "apt-get install --yes puppet"
 
+  # If you would like using ldap commands inside machine, please install 'ldap-utils'
+  # config.vm.provision "shell", inline: "apt-get install --yes ldap-utils"
+
   config.vm.provision :puppet do |puppet|
     puppet.hiera_config_path = "puppet/hiera.yaml"
     puppet.manifests_path = "puppet/manifests"
