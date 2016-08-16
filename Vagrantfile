@@ -21,9 +21,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.box = "debian/jessie64"
+  # config.vm.box = "ubuntu/trusty64"
 
   # Activate landrush plugin
-  config.landrush.enable
+  # config.landrush.enable
 
   config.vm.hostname = "#{NAME}.vagrant.test"
 
@@ -39,8 +40,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--cpus"  , 1]
   end
 
+  # If choose 'debian/jessie64' box, please install the provisioner as informed on https://wiki.debian.org/Teams/Cloud/VagrantBaseBoxes#Provisioners
+  config.vm.provision "shell", inline: "apt-get install --yes puppet"
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "init.pp"
+    puppet.module_path = "puppet/modules"
+    # puppet.options = "--verbose --debug"
   end
+
+  # config.vm.provision :puppet do |puppet|
+    # puppet.hiera_config_path = "puppet/hiera.yaml"
+    # puppet.module_path = "puppet/modules"
+    # puppet.manifests_path = "puppet/manifests"
+    # puppet.manifest_file  = "init.pp"
+    # puppet.options = "--verbose --debug"
+  # end
 end
