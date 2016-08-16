@@ -9,6 +9,7 @@ node "ldap.vagrant.dev" {
 
 	include info
 	include ldap
+	include ldapEntries
 	include ldapAdmin
 }
 
@@ -40,6 +41,25 @@ class ldap {
 	}
 
 	Class["ldap::server"] -> Class["ldap::client"]
+}
+
+class ldapEntries {
+	require ldap
+
+	$ldap_defaults = {
+		ensure 		=> present,
+		base   		=> $dn,
+		host   		=> $host,
+		port   		=> $port,
+		ssl    		=> false,
+		username    => hiera("ldap::server::rootdn"),
+		password    => hiera("ldap::server::rootpw"),
+	}
+
+	$password = sha1digest(hiera("ldap::server::rootpw"))
+
+	$ldap_entries = hiera_hash('ldap::entries')
+	create_resources('ldap_entry',$ldap_entries,$ldap_defaults)
 }
 
 class ldapAdmin {

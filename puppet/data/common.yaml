@@ -1,3 +1,5 @@
+# To validate yaml file - http://www.yamllint.com/
+
 welcome_message: 'Welcome to OpenLDAP vm for development'
 
 server::host: localhost
@@ -20,3 +22,25 @@ ldap::server::rootpw: 'admin'
 # LDAP Customization
 ldap::group::dn: "ou=company,%{hiera('ldap::server::suffix')}"
 ldap::group::name: "company"
+
+
+# LDAP Entries
+ldap::entries:
+  "%{dn}":
+    attributes:
+      dc: 'vagrant'
+      objectClass:
+        - top
+        - domain
+      description: 'Tree root'
+  "cn=admin,%{dn}":
+    attributes:
+      cn: 'admin'
+      objectClass:
+        - top
+        - person
+        - organizationalPerson
+        - inetOrgPerson
+      uid: 'admin'
+      sn: 'admin'
+      userPassword: "%{password}"
