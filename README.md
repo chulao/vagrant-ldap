@@ -14,7 +14,7 @@ Install [Vagrant](http://www.vagrantup.com/).
 It will need some plugins too:
 * [landrush](hhttps://github.com/vagrant-landrush/landrush)
 
-To install run the following command: `sudo puppet plugin install [plugin name]`
+To install run the following command: `sudo vagrant plugin install landrush`
 
 Clonning this repository: `git clone https://github.com/chulao/vagrant-ldap.git`
 
